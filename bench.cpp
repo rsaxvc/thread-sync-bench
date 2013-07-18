@@ -10,6 +10,7 @@ void * benchmark::threadrunner( void * vptr )
 thread_control_block * tcb = (benchmark::thread_control_block*)vptr;
 benchmark * b = tcb->bptr;
 b->run_thread( *tcb );
+return NULL;
 }
 
 void benchmark::run( size_t num_points, size_t num_threads )
