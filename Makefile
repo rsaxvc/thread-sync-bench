@@ -1,5 +1,5 @@
 CXX=g++
-CXXFLAGS=-march=native -O3 -g
+CXXFLAGS=-march=native -O3 -g -Wall
 CC=$(CXX)
 LDFLAGS=-lpthread -lrt
 BUILDS=bench
