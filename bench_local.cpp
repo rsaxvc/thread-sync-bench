@@ -25,8 +25,8 @@ in_square = 0;
 
 for( int i = 0; i < tcb.num_points; ++i )
 	{
-	float x = (float)rand_r(&tcb.rand_seed)/(float)RAND_MAX;
-	float y = (float)rand_r(&tcb.rand_seed)/(float)RAND_MAX;
+	uint16_t x = rand_r(&tcb.rand_seed) & 0xFFF;
+	uint16_t y = rand_r(&tcb.rand_seed) & 0xFFF;
 	if( benchmark::pt_in_circle( x, y ) )
 		{
 		in_circle++;

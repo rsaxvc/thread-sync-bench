@@ -26,9 +26,9 @@ class benchmark
 		int32_t * in_square;
 		};
 
-	static __inline bool pt_in_circle( float x, float y )
+	static __inline bool pt_in_circle( uint16_t x, uint16_t y )
 		{
-		return ( x*x + y*y ) < 1.0f;
+		return ( (uint32_t)x*(uint32_t)x + (uint32_t)y*(uint32_t)y ) < ( 0xFFF * 0xFFF );
 		}
 
 	virtual void prepare( size_t num_threads )=0;
@@ -44,6 +44,7 @@ class benchmark
 	public:
 		void run( size_t points, size_t threads );
 		float result();
+		virtual ~benchmark(){};
 	};
 
 #endif
