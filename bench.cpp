@@ -1,5 +1,5 @@
 #include "bench.hpp"
-#include <cstdlib>
+#include "xorshift.h"
 
 float benchmark::result( void )
 {
@@ -15,11 +15,16 @@ void * benchmark::threadrunner( void * vptr )
 {
 thread_control_block & tcb = *(benchmark::thread_control_block*)vptr;
 benchmark * b = tcb.bptr;
+uint32_t r = xorshift_init;
 
 for( size_t i = 0; i < tcb.num_points; ++i )
     {
-    uint16_t x = rand_r(&tcb.rand_seed) & 0xFFF;
-    uint16_t y = rand_r(&tcb.rand_seed) & 0xFFF;
+	r = xorshift( r );
+    uint16_t x = r & 0xFFF;
+
+	r = xorshift( r );
+    uint16_t y = r & 0xFFF;
+
     if( pt_in_circle( x, y ) )
 		b->count_circle( tcb );
 	else
