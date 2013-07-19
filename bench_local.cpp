@@ -5,50 +5,33 @@ void benchmark_local::prepare( size_t num_threads )
 {
 total_pts_in_circle = 0;
 total_pts_in_square = 0;
-in_circle = new int32_t[ num_threads ];
-in_square = new int32_t[ num_threads ];
 }
 
 void benchmark_local::prepare_thread( size_t thread_num, thread_control_block & tcb )
 {
-tcb.in_circle = &in_circle[thread_num];
-tcb.in_square = &in_square[thread_num];
+tcb.in_circle = new int32_t[2];
+tcb.in_square = tcb.in_circle + 1;
+*tcb.in_circle = 0;
+*tcb.in_square = 0;
 }
 
-void benchmark_local::run_thread( thread_control_block & tcb )
+void benchmark_local::count_circle( thread_control_block & tcb )
 {
-volatile int32_t in_circle;
-volatile int32_t in_square;
+(*tcb.in_circle)++;
+}
 
-in_circle = 0;
-in_square = 0;
-
-for( int i = 0; i < tcb.num_points; ++i )
-	{
-	uint16_t x = rand_r(&tcb.rand_seed) & 0xFFF;
-	uint16_t y = rand_r(&tcb.rand_seed) & 0xFFF;
-	if( benchmark::pt_in_circle( x, y ) )
-		{
-		in_circle++;
-        }
-    else
-        {
-		in_square++;
-        }
-    }
-
-*tcb.in_circle = in_circle;
-*tcb.in_square = in_square;
+void benchmark_local::count_square( thread_control_block & tcb )
+{
+(*tcb.in_square)++;
 }
 
 void benchmark_local::finish_thread( thread_control_block & tcb )
 {
 total_pts_in_circle += *tcb.in_circle;
 total_pts_in_square += *tcb.in_square;
+delete[] tcb.in_circle;
 }
 
 void benchmark_local::finish( void )
 {
-delete[] in_circle;
-delete[] in_square;
 }

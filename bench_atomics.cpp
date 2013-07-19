@@ -1,21 +1,14 @@
 #include "bench_atomics.hpp"
 #include <cstdlib>
 
-void benchmark_atomics::run_thread( thread_control_block & tcb )
+void benchmark_atomics::count_circle( thread_control_block & tcb )
 {
-for( int i = 0; i < tcb.num_points; ++i )
-	{
-	uint16_t x = rand_r(&tcb.rand_seed) & 0xFFF;
-	uint16_t y = rand_r(&tcb.rand_seed) & 0xFFF;
-	if( benchmark::pt_in_circle( x, y ) )
-		{
-		__sync_fetch_and_add( &in_circle, 1 );
-        }
-    else
-        {
-		__sync_fetch_and_add( &in_square, 1 );
-        }
-    }
+__sync_fetch_and_add( tcb.in_circle, 1 );
+}
+
+void benchmark_atomics::count_square( thread_control_block & tcb )
+{
+__sync_fetch_and_add( tcb.in_square, 1 );
 }
 
 void benchmark_atomics::finish( void )

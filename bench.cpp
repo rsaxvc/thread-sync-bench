@@ -1,15 +1,31 @@
 #include "bench.hpp"
+#include <cstdlib>
 
 float benchmark::result( void )
 {
 return 4.0 * (double)total_pts_in_circle / ( (double)total_pts_in_square + (double)total_pts_in_circle );
 }
 
+static __inline bool pt_in_circle( uint16_t x, uint16_t y )
+{
+return ( (uint32_t)x*(uint32_t)x + (uint32_t)y*(uint32_t)y ) < ( 0xFFF * 0xFFF );
+}
+
 void * benchmark::threadrunner( void * vptr )
 {
-thread_control_block * tcb = (benchmark::thread_control_block*)vptr;
-benchmark * b = tcb->bptr;
-b->run_thread( *tcb );
+thread_control_block & tcb = *(benchmark::thread_control_block*)vptr;
+benchmark * b = tcb.bptr;
+
+for( size_t i = 0; i < tcb.num_points; ++i )
+    {
+    uint16_t x = rand_r(&tcb.rand_seed) & 0xFFF;
+    uint16_t y = rand_r(&tcb.rand_seed) & 0xFFF;
+    if( pt_in_circle( x, y ) )
+		b->count_circle( tcb );
+	else
+		b->count_square( tcb );
+    }
+
 return NULL;
 }
 

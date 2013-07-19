@@ -10,8 +10,9 @@ class benchmark_shared:public benchmark
 
 	virtual void prepare( size_t num_threads );
 	virtual void prepare_thread(size_t, thread_control_block&);
-	virtual void run_thread( thread_control_block & );
-	virtual void finish_thread( thread_control_block&);
+	virtual void count_circle( thread_control_block & );
+	virtual void count_square( thread_control_block & );
+	virtual void finish_thread( thread_control_block & );
 	virtual void finish( void );
 	};
 
