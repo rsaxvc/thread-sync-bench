@@ -12,7 +12,7 @@ class benchmark
 	{
 	private:
 		static void * threadrunner( void * vtcb );
-
+		const char * errstr;
 	protected:
 		struct thread_control_block
 			{
@@ -39,9 +39,13 @@ class benchmark
 		size_t total_pts_in_square;
 
 	public:
-		void run( size_t points, size_t threads );
+		int run( size_t points, size_t threads );
 		float result();
 		virtual ~benchmark(){};
+		const char * errstring( void )
+			{
+			if( errstr )return errstr;else return "";
+			}
 	};
 
 #endif

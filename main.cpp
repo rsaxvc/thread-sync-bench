@@ -67,7 +67,13 @@ nthreads = atoi(args[3]);
 std::cerr<<"Approximating the value of PI using "<<count<<" pseudorandomly placed points and "<<nthreads<<" threads"<<std::endl;
 
 double time_start = my_time();
-b->run( count, nthreads );
+if( b->run( count, nthreads ) >= 0 )
+	{
+	}
+else
+	{
+	std::cerr << "Error:" << b->errstring() <<std::endl;
+	}
 double time_end = my_time();
 
 std::cout<<(time_end-time_start);

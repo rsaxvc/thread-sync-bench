@@ -34,7 +34,7 @@ for( size_t i = 0; i < tcb.num_points; ++i )
 return NULL;
 }
 
-void benchmark::run( size_t num_points, size_t num_threads )
+int benchmark::run( size_t num_points, size_t num_threads )
 {
 int approx_points_per_thread;
 thread_control_block * tcbs;
@@ -75,4 +75,12 @@ for( size_t i = 0; i < num_threads; ++i )
 delete[]( tcbs );
 
 finish();
+
+if( total_pts_in_circle + total_pts_in_square != num_points )
+	{
+	errstr = "accumulator mismatch - number of result points not equal to number of test points";
+	return -1;
+	}
+
+return 0;
 }
