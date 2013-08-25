@@ -38,25 +38,27 @@ void benchmark::run( size_t num_points, size_t num_threads )
 {
 int approx_points_per_thread;
 thread_control_block * tcbs;
+size_t num_points_remaining;
 
 prepare( num_threads );
 
 tcbs = new thread_control_block[num_threads];
 approx_points_per_thread = num_points / num_threads;
+num_points_remaining = num_points;
 for( size_t i = 0; i < num_threads; ++i )
     {
-    tcbs[i].num_points=approx_points_per_thread;
-    num_points -= approx_points_per_thread;
+    tcbs[i].num_points = approx_points_per_thread;
+    num_points_remaining -= approx_points_per_thread;
 
     tcbs[i].rand_seed = i;
 
 	tcbs[i].bptr = this;
 	prepare_thread( i, tcbs[i] );
     }
-while( num_points > 0 )
+while( num_points_remaining > 0 )
     {
     tcbs[ num_points % num_threads ].num_points ++;
-    num_points--;
+    num_points_remaining--;
     }
 
 for( size_t i = 0; i < num_threads; ++i )
