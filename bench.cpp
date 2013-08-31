@@ -63,7 +63,12 @@ while( num_points_remaining > 0 )
 
 for( size_t i = 0; i < num_threads; ++i )
     {
-    pthread_create( &tcbs[i].id, NULL, threadrunner, &tcbs[i] );
+    int errnum = pthread_create( &tcbs[i].id, NULL, threadrunner, &tcbs[i] );
+    if( errnum )
+        {
+        errstr = "unable to create thread";
+        return -2;
+        }
     }
 
 for( size_t i = 0; i < num_threads; ++i )
